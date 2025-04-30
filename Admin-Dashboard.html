@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+  <script>
+    var movies = ['CHAVVA', 'CAPTAIN AMERICA'];
+    function bodyload() {
+      document.getElementById("moviename").innerHTML = "";
+      movies.map(function (movie) {
+        var option = document.createElement("option");
+        option.text = movie.toUpperCase();
+        option.value = movie.toUpperCase();
+        document.getElementById("moviename").appendChild(option);
+      });
+      document.getElementById("count").innerHTML = `Total Movies Count is : ${movies.length}`;
+    }
+
+    function Addnew() {
+      var newmovie = document.getElementById("newmovie").value;
+      if (newmovie.length === 0) {
+        alert('please enter a movie name');
+      }
+      else {
+        var movieIndex = movies.indexOf(newmovie.toUpperCase());
+        if (movieIndex === -1) {
+          movies.push(newmovie.toUpperCase());
+          alert(`${newmovie.toUpperCase()} Added to list`);
+          bodyload();
+          document.getElementById("newmovie").value = "";
+        }
+        else {
+          alert(`${newmovie} Exists`)
+          bodyload();
+          document.getElementById("newmovie").value = "";
+
+        }
+      }
+    }
+
+    function Ascending() {
+      movies.sort();
+      bodyload();
+    }
+
+    function Descending() {
+      movies.sort().reverse();
+      bodyload();
+    }
+
+    function ClearAll() {
+      var conform = confirm('Are you sure you want to delete all movies');
+      if (conform === true) {
+        movies.length = 0;
+        bodyload();
+      }
+    }
+
+    function Deleteitem() {
+      var selected = document.getElementById("moviename").value;
+      var selectedIndex = movies.indexOf(selected);
+      var conform = confirm(`Are you sure? \n You want to delete \n ${selected}`);
+      if (conform === true) {
+        movies.splice(selectedIndex, 1);
+        bodyload();
+      }
+
+    }
+    function Edit() {
+      var selected = document.getElementById("moviename").value;
+      var selectedIndex = movies.indexOf(selected);
+      document.getElementById("editedmovie").value = selected;
+    }
+
+    function saveClick() {
+      var selected = document.getElementById("moviename").value;
+      var selectedIndex = movies.indexOf(selected);
+      var edited = document.getElementById("editedmovie").value;
+      movies[selectedIndex] = edited.toUpperCase();
+      bodyload();
+    }
+  </script>
+</head>
+
+<body onload="bodyload()">
+  <div class="container-fluid border border-3 border-warning-subtle rounded w-50 p-4 "
+    style="box-sizing: border-box; box-shadow: 2px 2px 5px lightgrey,-2px -2px 5px lightgray;">
+    <h3><i class="bi bi-ticket-detailed-fill"></i> Book my Show Admin-Dashboard</h3>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Add New Movie Name" id="newmovie">
+      <button class="btn btn-primary" id="addbtn" onclick="Addnew()">Add</button>
+    </div>
+    <div>
+      <strong class="form-label">Movie List</strong>
+      <div class="my-2">
+        <button class="btn btn-success" onclick="Ascending()"><i class="bi bi-sort-alpha-down"></i></button>
+        <button class="btn btn-success" onclick="Descending()"><i class="bi bi-sort-alpha-up"></i></button>
+      </div>
+    </div>
+    <div>
+      <select id="moviename" size="3" class="form-select"></select>
+      <p id="count" class=" fw-bold"></p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-warning" data-bs-target="#editbox" data-bs-toggle="modal" onclick="Edit()"><i
+          class="bi bi-pen"></i> Edit Movie </button>
+      <button class="btn btn-danger" onclick="Deleteitem()"><i class="bi bi-trash"></i>Remove Movie</button>
+      <button class="btn btn-outline-danger" onclick="ClearAll()"><i class="bi bi-trash"></i>Clear All</button>
+    </div>
+    <div class="modal fade" id="editbox">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title"> Edit Movie Name</h3>
+          </div>
+          <div class="modal-body"> <input type="text" placeholder="Enter Your Updates" id="editedmovie"
+              class="form-control"></div>
+          <div class="modal-footer">
+            <button class="btn btn-success" id="saveEdit" onclick="saveClick()" data-bs-dismiss="modal">Save</button>
+            <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+</html>
